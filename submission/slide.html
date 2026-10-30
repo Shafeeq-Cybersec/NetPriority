@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Team Mutex – NetPriority · TELIPORT S4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1280px;
+    height: 720px;
+    background: #ffffff;
+    font-family: 'Open Sans', Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #1a3a5c;
+    color: #fff;
+    padding: 14px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-box {
+    width: 42px; height: 42px;
+    background: #f0a500;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; color: #1a3a5c; letter-spacing: -1px;
+  }
+  .project-title { font-size: 22px; font-weight: 800; color: #fff; }
+  .project-subtitle { font-size: 11px; color: #a8c4e0; margin-top: 2px; }
+  .header-right { text-align: right; }
+  .team-name { font-size: 14px; font-weight: 700; color: #f0a500; }
+  .team-meta { font-size: 10px; color: #a8c4e0; margin-top: 2px; }
+  .contest-tag {
+    display: inline-block; background: #f0a500; color: #1a3a5c;
+    font-size: 9px; font-weight: 700; padding: 2px 8px;
+    border-radius: 3px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* ── MAIN GRID ── */
+  .content {
+    display: grid;
+    grid-template-columns: 224px 1fr 224px;
+    height: calc(720px - 72px - 32px);
+    padding: 14px 18px 0 18px;
+    gap: 0;
+  }
+
+  /* ── LEFT ── */
+  .left-col {
+    display: flex; flex-direction: column; gap: 10px;
+    padding-right: 14px;
+    border-right: 2px dashed #c8d8e8;
+  }
+  .box-title {
+    font-size: 9px; font-weight: 700; color: #1a3a5c;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    border-bottom: 1px solid #c2d4e8; padding-bottom: 4px; margin-bottom: 7px;
+  }
+  .problem-box {
+    background: #f5f8fc; border: 1.5px solid #c2d4e8;
+    border-left: 4px solid #1a3a5c; border-radius: 4px; padding: 10px 12px;
+  }
+  .problem-box p { font-size: 10.5px; color: #333; line-height: 1.55; }
+
+  .scenario-box {
+    background: #fffbf0; border: 1.5px solid #f0d080;
+    border-left: 4px solid #f0a500; border-radius: 4px; padding: 10px 12px; flex: 1;
+  }
+  .scenario-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+  .scenario-item:last-child { margin-bottom: 0; }
+  .s-icon {
+    width: 20px; height: 20px; min-width: 20px; background: #f0a500;
+    border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 11px;
+  }
+  .s-text { font-size: 10px; color: #333; line-height: 1.45; }
+  .s-text strong { color: #1a3a5c; font-weight: 700; }
+
+  /* ── CENTRE ── */
+  .centre-col { padding: 0 18px; }
+  .arch-title {
+    text-align: center; font-size: 10.5px; font-weight: 700; color: #1a3a5c;
+    text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 2px solid #1a3a5c; padding-bottom: 4px; margin-bottom: 10px;
+  }
+  .arch-flow { display: flex; flex-direction: column; align-items: center; }
+  .layer-row { display: flex; gap: 8px; justify-content: center; width: 100%; }
+
+  .module { border-radius: 5px; padding: 7px 10px; text-align: center; }
+  .m-title { font-size: 10px; font-weight: 700; }
+  .m-sub { font-size: 8.5px; margin-top: 2px; opacity: 0.9; line-height: 1.4; }
+
+  .mod-blue   { background: #dce9f5; border: 1.5px solid #6a9cc4; color: #1a3a5c; }
+  .mod-orange { background: #fef0cc; border: 1.5px solid #f0a500; color: #7a4f00; }
+  .mod-green  { background: #dff2e8; border: 1.5px solid #4caf82; color: #1a5c38; }
+  .mod-purple { background: #ede8f8; border: 1.5px solid #8a6cbf; color: #3d2270; }
+  .mod-dark   { background: #1a3a5c; border: 1.5px solid #1a3a5c; color: #fff; }
+  .mod-wide   { width: 100%; }
+
+  .arrow-spacer { height: 14px; display: flex; align-items: center; justify-content: center; }
+  .arrow-down-line {
+    width: 2px; height: 10px; background: #999; position: relative; margin: 0 auto;
+  }
+  .arrow-down-line::after {
+    content: ''; position: absolute; bottom: -5px; left: -4px;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid #999;
+  }
+  .arrow-row { display: flex; justify-content: center; gap: 8px; width: 100%; height: 18px; align-items: center; }
+  .arrow-cell { display: flex; flex-direction: column; align-items: center; }
+
+  /* ── RIGHT ── */
+  .right-col {
+    display: flex; flex-direction: column; gap: 10px;
+    padding-left: 14px;
+    border-left: 2px dashed #c8d8e8;
+  }
+  .metrics-box {
+    background: #f5f8fc; border: 1.5px solid #c2d4e8;
+    border-left: 4px solid #2196a8; border-radius: 4px; padding: 10px 12px;
+  }
+  .metric-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+  .metric-row:last-child { margin-bottom: 0; }
+  .metric-label { font-size: 9.5px; color: #333; width: 72px; }
+  .metric-bar-bg { flex: 1; height: 7px; background: #dce9f5; border-radius: 4px; overflow: hidden; }
+  .metric-bar { height: 100%; border-radius: 4px; }
+  .metric-value { font-size: 9.5px; font-weight: 700; color: #1a3a5c; width: 40px; text-align: right; }
+
+  .diff-box {
+    background: #f0fff5; border: 1.5px solid #80c8a0;
+    border-left: 4px solid #28a060; border-radius: 4px; padding: 10px 12px; flex: 1;
+  }
+  .diff-item {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed #b0dcbf; font-size: 10px;
+  }
+  .diff-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .diff-label { color: #333; }
+  .diff-val { font-weight: 700; color: #28a060; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #f0f4f8; border-top: 2px solid #1a3a5c;
+    height: 32px; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 36px;
+  }
+  .footer-side { font-size: 9.5px; color: #555; }
+  .footer-center { display: flex; gap: 20px; }
+  .member { font-size: 9.5px; font-weight: 700; color: #1a3a5c; }
+  .member span { font-weight: 400; color: #888; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-box">NP</div>
+    <div>
+      <div class="project-title">NetPriority</div>
+      <div class="project-subtitle">Adaptive QoS Engine for Mixed Home Broadband Traffic</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="team-name">Team Mutex</div>
+    <div class="team-meta">Panimalar Engineering College</div>
+    <div class="contest-tag">TELIPORT Season 4 · Case Study 3</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="content">
+
+  <!-- LEFT COLUMN -->
+  <div class="left-col">
+    <div class="problem-box">
+      <div class="box-title">🔴 The Problem</div>
+      <p>
+        A home connection must simultaneously serve video calls, gaming, streaming,
+        bulk downloads and cloud backup.
+        <br/><br/>
+        Static priority rules fail when demand changes. High throughput alone is
+        insufficient — large queues introduce delay and jitter that break real-time apps.
+      </p>
+    </div>
+
+    <div class="scenario-box">
+      <div class="box-title">📋 Test Scenarios</div>
+      <div class="scenario-item">
+        <div class="s-icon">⬇</div>
+        <div class="s-text"><strong>ISO download</strong> starts mid-video-call → bulk queue capped, call latency protected</div>
+      </div>
+      <div class="scenario-item">
+        <div class="s-icon">📉</div>
+        <div class="s-text"><strong>WAN drops</strong> 100 → 20 Mbps → shaping policy recalculated in real time</div>
+      </div>
+      <div class="scenario-item">
+        <div class="s-icon">🎮</div>
+        <div class="s-text"><strong>3 TVs + gaming</strong> → fair scheduling balances service quality across all devices</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRE COLUMN -->
+  <div class="centre-col">
+    <div class="arch-title">Solution Architecture — NetPriority</div>
+
+    <div class="arch-flow">
+
+      <div class="layer-row">
+        <div class="module mod-blue" style="width:47%">
+          <div class="m-title">🌐 Network Traffic</div>
+          <div class="m-sub">IPv4 / IPv6 · No payload decryption</div>
+        </div>
+        <div class="module mod-blue" style="width:47%">
+          <div class="m-title">📡 Link Monitor</div>
+          <div class="m-sub">Bandwidth · RTT · Queue depth</div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-cell" style="width:47%"><div class="arrow-down-line"></div></div>
+        <div class="arrow-cell" style="width:47%"><div class="arrow-down-line"></div></div>
+      </div>
+
+      <div class="layer-row">
+        <div class="module mod-orange" style="width:47%">
+          <div class="m-title">🔍 Traffic Classifier</div>
+          <div class="m-sub">Port · flow size · inter-packet timing<br/>Confidence score + correction UI</div>
+        </div>
+        <div class="module mod-orange" style="width:47%">
+          <div class="m-title">📊 Capacity Estimator</div>
+          <div class="m-sub">Available BW estimation<br/>Jitter · loss · queue model</div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-cell" style="width:97%"><div class="arrow-down-line"></div></div>
+      </div>
+
+      <div class="layer-row">
+        <div class="module mod-purple mod-wide">
+          <div class="m-title">⚙️ Adaptive QoS Policy Engine</div>
+          <div class="m-sub">Dynamic scheduling · Fair queuing · Starvation prevention · Policy rollback · Temporary intent API ("Prioritize my call for 30 min")</div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-cell" style="width:47%"><div class="arrow-down-line"></div></div>
+        <div class="arrow-cell" style="width:47%"><div class="arrow-down-line"></div></div>
+      </div>
+
+      <div class="layer-row">
+        <div class="module mod-green" style="width:47%">
+          <div class="m-title">🛠 Enforcement (Linux tc)</div>
+          <div class="m-sub">HTB · FQ-CoDel · DSCP marking<br/>Bounded · Observable · Reversible</div>
+        </div>
+        <div class="module mod-green" style="width:47%">
+          <div class="m-title">📈 Live Dashboard</div>
+          <div class="m-sub">Latency · Jitter · Loss · Throughput<br/>Queue depth · Fairness index</div>
+        </div>
+      </div>
+
+      <div class="arrow-row">
+        <div class="arrow-cell" style="width:97%"><div class="arrow-down-line"></div></div>
+      </div>
+
+      <div class="layer-row">
+        <div class="module mod-dark mod-wide">
+          <div class="m-title">🧪 Automated Baseline vs. Optimized Experiment Runner</div>
+          <div class="m-sub">Reproducible results · Generates result report · AI vs deterministic baseline comparison</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-col">
+    <div class="metrics-box">
+      <div class="box-title">🎯 Target Improvements</div>
+      <div class="metric-row">
+        <div class="metric-label">Call Latency</div>
+        <div class="metric-bar-bg"><div class="metric-bar" style="width:80%;background:#28a060;"></div></div>
+        <div class="metric-value">↓ 60%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Jitter</div>
+        <div class="metric-bar-bg"><div class="metric-bar" style="width:70%;background:#2196a8;"></div></div>
+        <div class="metric-value">↓ 55%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Packet Loss</div>
+        <div class="metric-bar-bg"><div class="metric-bar" style="width:65%;background:#f0a500;"></div></div>
+        <div class="metric-value">↓ 50%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Adapt Speed</div>
+        <div class="metric-bar-bg"><div class="metric-bar" style="width:85%;background:#8a6cbf;"></div></div>
+        <div class="metric-value">&lt; 500ms</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Fairness</div>
+        <div class="metric-bar-bg"><div class="metric-bar" style="width:90%;background:#1a3a5c;"></div></div>
+        <div class="metric-value">JFI &gt; 0.9</div>
+      </div>
+    </div>
+
+    <div class="diff-box">
+      <div class="box-title">✅ Why NetPriority</div>
+      <div class="diff-item">
+        <div class="diff-label">No payload decryption</div>
+        <div class="diff-val">Privacy-safe</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Intent-aware API</div>
+        <div class="diff-val">User-first</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">AI + deterministic</div>
+        <div class="diff-val">Measurable</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Policy rollback</div>
+        <div class="diff-val">Safe & reversible</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Open interfaces</div>
+        <div class="diff-val">Reproducible</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Modular design</div>
+        <div class="diff-val">Independently testable</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-side">Case Study 3 · Adaptive QoS Engine for Mixed Home Broadband Traffic</div>
+  <div class="footer-center">
+    <span class="member">Saravanakumar G <span>(Leader)</span></span>
+    <span class="member">Shafeeq S</span>
+    <span class="member">Vinesh S</span>
+  </div>
+  <div class="footer-side">Panimalar Engineering College · TELIPORT S4</div>
+</div>
+
+</body>
+</html>
