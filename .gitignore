@@ -1,0 +1,53 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables / secrets
+.env
+.env.*
+
+# ---------- Node ----------
+node_modules/
+dist/
+*.local
+
+# Vite
+.vite/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# ---------- Logs ----------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ---------- Editor / IDE ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Test cache ----------
+.pytest_cache/
+
+# ---------- Submission build artifacts ----------
+# Keep the HTML slide (source). Exclude generated PPTX and build script.
+submission/build_pptx.py
+submission/*.pptx
