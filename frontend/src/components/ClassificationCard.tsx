@@ -95,6 +95,22 @@ export default function ClassificationCard({ flow }: ClassificationCardProps) {
         />
       </div>
 
+      {/* QoS marking recommendation derived from the effective category */}
+      <div
+        className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-lg border border-white/10 bg-slate-950/30 px-3 py-2"
+        title={flow.qos.treatment}
+      >
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          QoS
+        </span>
+        <span className="font-mono text-xs text-slate-300">
+          DSCP {flow.qos.dscp} · {flow.qos.dscp_class}
+        </span>
+        <span className="text-xs text-slate-500">
+          Queue {flow.qos.queue} · {flow.qos.priority} priority
+        </span>
+      </div>
+
       {/* If overridden, show both original and override */}
       {flow.is_manually_overridden && (
         <div className="mb-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs text-slate-400">

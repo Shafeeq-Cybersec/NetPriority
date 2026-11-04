@@ -2,10 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   getHealthStatus,
   listFlows,
+  listQoSPolicies,
   overrideClassification,
   submitFlow,
   type FlowResponse,
   type FlowSubmit,
+  type QoSProfile,
   type TrafficCategory,
 } from "./api";
 import BackendStatus, { type BackendState } from "./components/BackendStatus";
@@ -13,6 +15,7 @@ import ClassificationCard from "./components/ClassificationCard";
 import FlowForm from "./components/FlowForm";
 import FlowList from "./components/FlowList";
 import OverrideModal from "./components/OverrideModal";
+import QoSPolicyPanel from "./components/QoSPolicyPanel";
 import StatusBar from "./components/StatusBar";
 import ToastStack from "./components/ToastStack";
 import { useToast } from "./hooks/useToast";
@@ -23,6 +26,9 @@ export default function App() {
   // ── registry ──────────────────────────────────────────────────────────────
   const [flows, setFlows] = useState<FlowResponse[]>([]);
   const [flowsStatus, setFlowsStatus] = useState<LoadStatus>("idle");
+
+  // ── QoS marking policy ────────────────────────────────────────────────────
+  const [qosPolicies, setQosPolicies] = useState<QoSProfile[]>([]);
 
   // ── latest submit result ──────────────────────────────────────────────────
   const [lastResult, setLastResult] = useState<FlowResponse | null>(null);
@@ -97,6 +103,22 @@ export default function App() {
   useEffect(() => {
     void fetchFlows();
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── fetch the QoS policy table once ───────────────────────────────────────
+  useEffect(() => {
+    let cancelled = false;
+    listQoSPolicies()
+      .then((data) => {
+        if (!cancelled) setQosPolicies(data);
+      })
+      .catch(() => {
+        // Policy table is supplementary — the classifier still works without it.
+        if (!cancelled) setQosPolicies([]);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // ── submit flow ───────────────────────────────────────────────────────────
@@ -279,6 +301,12 @@ export default function App() {
             )}
           </div>
         </div>
+
+        {/* ── QoS marking policy (category → DSCP / queue) ── */}
+        <QoSPolicyPanel
+          policies={qosPolicies}
+          activeCategory={displayFlow?.effective_category ?? null}
+        />
 
         {/* ── Flow list (#1 live search, #2 Source badges) ── */}
         <FlowList

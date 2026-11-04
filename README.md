@@ -25,7 +25,8 @@ NetPriority/
 │   │   │   └── config.py     # Project metadata + CORS settings
 │   │   ├── routers/
 │   │   │   ├── info.py       # GET /  – project information
-│   │   │   └── health.py     # GET /api/health – health status
+│   │   │   ├── health.py     # GET /api/health – health status
+│   │   │   └── qos.py        # GET /api/qos/policies – QoS marking policy
 │   │   └── main.py           # FastAPI app entry point
 │   ├── requirements.txt
 │   └── venv/                 # Python virtual environment (created in setup)
@@ -118,6 +119,12 @@ npm run dev
 | ------ | ------------- | ------------------------------------------------------------- |
 | GET    | `/`           | Returns project name, description, version, and status.       |
 | GET    | `/api/health` | Returns backend health status, service name, and timestamp.   |
+| GET    | `/api/qos/policies` | Category → DSCP / queue QoS marking policy (see [QOS_POLICY.md](backend/QOS_POLICY.md)). |
+
+Phase 1 adds the classifier endpoints (`/api/flows`, `/api/flows/{id}`,
+`/api/flows/{id}/classification`) and a `qos` marking recommendation on every
+flow response. See [PHASE1_CLASSIFIER.md](backend/PHASE1_CLASSIFIER.md) and
+[QOS_POLICY.md](backend/QOS_POLICY.md).
 
 ### Example responses
 

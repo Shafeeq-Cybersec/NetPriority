@@ -38,6 +38,15 @@ export interface ClassificationResult {
   matched_rules: string[];
 }
 
+export interface QoSProfile {
+  category: TrafficCategory;
+  dscp: number;
+  dscp_class: string;
+  priority: string;
+  queue: string;
+  treatment: string;
+}
+
 export interface FlowResponse {
   flow_id: string;
   created_at: string;
@@ -56,6 +65,7 @@ export interface FlowResponse {
   manual_override_reason: string | null;
   is_manually_overridden: boolean;
   effective_category: TrafficCategory;
+  qos: QoSProfile;
 }
 
 export interface FlowSubmit {
@@ -138,6 +148,11 @@ export function submitFlow(body: FlowSubmit): Promise<FlowResponse> {
 /** GET /api/flows/:id — retrieve a single flow */
 export function getFlow(flowId: string): Promise<FlowResponse> {
   return request<FlowResponse>(`/api/flows/${flowId}`);
+}
+
+/** GET /api/qos/policies — category → DSCP / queue policy table */
+export function listQoSPolicies(): Promise<QoSProfile[]> {
+  return request<QoSProfile[]>("/api/qos/policies");
 }
 
 /** PATCH /api/flows/:id/classification — manually override classification */

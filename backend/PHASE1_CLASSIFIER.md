@@ -17,7 +17,7 @@ with a confidence score and a human-readable explanation.
 
 ## Traffic Categories
 
-| Category | DSCP (future) | Typical traffic |
+| Category | DSCP | Typical traffic |
 |---|---|---|
 | Gaming | 46 | UDP game state updates, Steam, Xbox Live, PSN |
 | Video | 34 | RTP video, RTSP streams, WebRTC, adaptive bitrate |
@@ -64,6 +64,13 @@ will produce a low score and may fall below the threshold.
 > ⚠️ This is a **rule-based heuristic score**, not a statistically
 > calibrated probability.  It reflects how many independent rule signals
 > support the assigned category and how strongly those rules are weighted.
+
+### QoS marking recommendation
+
+Every flow response also carries a `qos` object (DSCP, priority, queue and
+treatment) derived from the effective category, and the full policy table is
+exposed at `GET /api/qos/policies`.  Marking is a recommendation for a future
+enforcement layer — no packets are marked yet.  See [QOS_POLICY.md](QOS_POLICY.md).
 
 ---
 

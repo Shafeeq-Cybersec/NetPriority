@@ -17,6 +17,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from app.core import qos as qos_policy
+
 
 # ---------------------------------------------------------------------------
 # Enumerations
@@ -68,6 +70,39 @@ class ClassificationResult(BaseModel):
     matched_rules: list[str] = Field(
         default_factory=list,
         description="Names of the classification rules that contributed to this result.",
+    )
+
+
+# ---------------------------------------------------------------------------
+# QoS marking recommendation derived from the effective category
+# ---------------------------------------------------------------------------
+
+
+class QoSProfile(BaseModel):
+    """
+    Recommended QoS marking for a traffic category.
+
+    These are DiffServ policy values (not yet enforced on the wire):
+    dscp is the 6-bit code point, dscp_class its standard name, and
+    queue identifies the output queue the flow should be scheduled into.
+    """
+
+    category: TrafficCategory
+    dscp: int = Field(
+        ge=0, le=63,
+        description="DiffServ code point (0–63) recommended for this category.",
+    )
+    dscp_class: str = Field(
+        description="Standard DSCP class name, e.g. 'EF', 'AF41', 'CS0'."
+    )
+    priority: str = Field(
+        description="Human-readable priority tier, e.g. 'Critical'."
+    )
+    queue: str = Field(
+        description="Output queue label the flow should be scheduled into."
+    )
+    treatment: str = Field(
+        description="Short description of the scheduling treatment."
     )
 
 
@@ -227,6 +262,11 @@ class FlowRecord(BaseModel):
             manual_override_reason=self.manual_override_reason,
             is_manually_overridden=self.is_manually_overridden,
             effective_category=self.effective_category,
+            # QoS marking follows the effective category, so a manual
+            # override also corrects the recommended DSCP / queue.
+            qos=QoSProfile(
+                **qos_policy.policy_for(self.effective_category.value)
+            ),
         )
 
 
@@ -255,6 +295,7 @@ class FlowResponse(BaseModel):
     manual_override_reason: Optional[str] = None
     is_manually_overridden: bool
     effective_category: TrafficCategory
+    qos: QoSProfile
 
 
 # ---------------------------------------------------------------------------

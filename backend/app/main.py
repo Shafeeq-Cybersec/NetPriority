@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.routers import flows, health, info
+from app.routers import flows, health, info, qos
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -28,3 +28,4 @@ app.add_middleware(
 app.include_router(info.router)
 app.include_router(health.router)
 app.include_router(flows.router)  # Phase 1 — traffic classifier
+app.include_router(qos.router)    # Phase 1 — QoS marking policy
