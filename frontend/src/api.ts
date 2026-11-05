@@ -155,6 +155,73 @@ export function listQoSPolicies(): Promise<QoSProfile[]> {
   return request<QoSProfile[]>("/api/qos/policies");
 }
 
+// ---------------------------------------------------------------------------
+// Phase 2 — Link Capacity Estimator types and endpoints
+// ---------------------------------------------------------------------------
+
+export type CongestionState = "clear" | "moderate" | "congested";
+
+export interface FlowThroughput {
+  flow_id: string;
+  src_ip: string;
+  dst_ip: string;
+  src_port: number | null;
+  dst_port: number | null;
+  protocol: string;
+  effective_category: string;
+  byte_count: number | null;
+  duration_seconds: number | null;
+  computed_bps: number | null;
+  computed_kbps: number | null;
+  computed_mbps: number | null;
+  inter_arrival_ms: number | null;
+}
+
+export interface CapacitySnapshot {
+  observed_bps: number;
+  observed_mbps: number;
+  link_speed_mbps: number;
+  utilisation_pct: number;
+  congestion_state: CongestionState;
+  mean_jitter_ms: number | null;
+  max_jitter_ms: number | null;
+  active_flows: number;
+  measurable_flows: number;
+  estimated_at: string;
+  method: string;
+  limitation: string;
+}
+
+export interface CategoryBandwidth {
+  category: string;
+  flow_count: number;
+  observed_bps: number;
+  observed_mbps: number;
+  share_pct: number;
+}
+
+export interface CapacityEstimate {
+  snapshot: CapacitySnapshot;
+  by_category: CategoryBandwidth[];
+  flows: FlowThroughput[];
+}
+
+/** GET /api/capacity — full estimate (snapshot + breakdown + per-flow) */
+export function getCapacityEstimate(
+  linkSpeedMbps?: number,
+): Promise<CapacityEstimate> {
+  const qs = linkSpeedMbps != null ? `?link_speed_mbps=${linkSpeedMbps}` : "";
+  return request<CapacityEstimate>(`/api/capacity${qs}`);
+}
+
+/** GET /api/capacity/snapshot — aggregate snapshot only */
+export function getCapacitySnapshot(
+  linkSpeedMbps?: number,
+): Promise<CapacitySnapshot> {
+  const qs = linkSpeedMbps != null ? `?link_speed_mbps=${linkSpeedMbps}` : "";
+  return request<CapacitySnapshot>(`/api/capacity/snapshot${qs}`);
+}
+
 /** PATCH /api/flows/:id/classification — manually override classification */
 export function overrideClassification(
   flowId: string,

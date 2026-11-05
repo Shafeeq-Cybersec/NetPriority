@@ -1,16 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  getCapacityEstimate,
   getHealthStatus,
   listFlows,
   listQoSPolicies,
   overrideClassification,
   submitFlow,
+  type CapacityEstimate,
   type FlowResponse,
   type FlowSubmit,
   type QoSProfile,
   type TrafficCategory,
 } from "./api";
 import BackendStatus, { type BackendState } from "./components/BackendStatus";
+import CapacityPanel from "./components/CapacityPanel";
 import ClassificationCard from "./components/ClassificationCard";
 import FlowForm from "./components/FlowForm";
 import FlowList from "./components/FlowList";
@@ -121,6 +124,33 @@ export default function App() {
     };
   }, []);
 
+  // ── Phase 2 — link capacity estimate ─────────────────────────────────────
+  const [capacityEstimate, setCapacityEstimate] = useState<CapacityEstimate | null>(null);
+  const [capacityLoading, setCapacityLoading] = useState(false);
+  const [capacityError, setCapacityError] = useState("");
+  const [linkSpeedMbps, setLinkSpeedMbps] = useState(100);
+
+  const fetchCapacity = useCallback(async (speedMbps?: number) => {
+    setCapacityLoading(true);
+    setCapacityError("");
+    try {
+      const data = await getCapacityEstimate(speedMbps ?? linkSpeedMbps);
+      setCapacityEstimate(data);
+    } catch (err) {
+      setCapacityError(err instanceof Error ? err.message : "Capacity estimate failed.");
+    } finally {
+      setCapacityLoading(false);
+    }
+  }, [linkSpeedMbps]);
+
+  // fetch capacity on mount
+  useEffect(() => { void fetchCapacity(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleLinkSpeedChange = (mbps: number) => {
+    setLinkSpeedMbps(mbps);
+    void fetchCapacity(mbps);
+  };
+
   // ── submit flow ───────────────────────────────────────────────────────────
   const handleSubmit = async (flow: FlowSubmit) => {
     setSubmitStatus("loading");
@@ -140,6 +170,7 @@ export default function App() {
         `Classified ${result.src_ip}:${result.src_port ?? "?"} → ${result.dst_ip} as ${result.effective_category}`,
       );
       void fetchFlows(true);
+      void fetchCapacity();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Submission failed.";
       setSubmitError(msg);
@@ -302,13 +333,23 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── QoS marking policy (category → DSCP / queue) ── */}
+        {/* ── QoS marking policy ── */}
         <QoSPolicyPanel
           policies={qosPolicies}
           activeCategory={displayFlow?.effective_category ?? null}
         />
 
-        {/* ── Flow list (#1 live search, #2 Source badges) ── */}
+        {/* ── Phase 2 — Link Capacity Estimator ── */}
+        <CapacityPanel
+          estimate={capacityEstimate}
+          loading={capacityLoading}
+          error={capacityError}
+          linkSpeedMbps={linkSpeedMbps}
+          onLinkSpeedChange={handleLinkSpeedChange}
+          onRefresh={() => void fetchCapacity()}
+        />
+
+        {/* ── Flow list ── */}
         <FlowList
           flows={flows}
           selectedId={selectedFlow?.flow_id ?? null}
